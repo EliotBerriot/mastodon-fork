@@ -31,8 +31,8 @@ aliases:
   - &restore_ruby_dependencies
     restore_cache:
       keys:
-        - v2-ruby-dependencies-{{ checksum "/tmp/.ruby-version" }}-{{ checksum "Gemfile.lock" }}
-        - v2-ruby-dependencies-{{ checksum "/tmp/.ruby-version" }}-
+        - FLUSH3-v2-ruby-dependencies-{{ checksum "/tmp/.ruby-version" }}-{{ checksum "Gemfile.lock" }}
+        - FLUSH3-v2-ruby-dependencies-{{ checksum "/tmp/.ruby-version" }}-
         - v2-ruby-dependencies-
 
   - &install_steps
@@ -69,14 +69,15 @@ aliases:
         - *install_system_dependencies
         - run: ruby -e 'puts RUBY_VERSION' | tee /tmp/.ruby-version
         - *restore_ruby_dependencies
-        - run: bundle config set clean 'true'
+        # - run: bundle config set clean 'true'
         - run: bundle config set deployment 'true'
+        - run: bundle config set path 'vendor/bundle'
         - run: bundle config set with 'pam_authentication'
         - run: bundle config set without 'development production'
         - run: bundle config set frozen 'true'
-        - run: bundle install --jobs 16 --retry 3 && bundle clean --force
+        - run: bundle install --jobs 16 --retry 3
         - save_cache:
-            key: v2-ruby-dependencies-{{ checksum "/tmp/.ruby-version" }}-{{ checksum "Gemfile.lock" }}
+            key: FLUSH3-v2-ruby-dependencies-{{ checksum "/tmp/.ruby-version" }}-{{ checksum "Gemfile.lock" }}
             paths:
               - ./.bundle/
               - ./vendor/bundle/
@@ -90,6 +91,7 @@ aliases:
       steps:
         - *attach_workspace
         - *install_system_dependencies
+        - run: bundle config set path 'vendor/bundle'
         - run: sudo apt-get install -y ffmpeg
         - run:
             name: Prepare Tests
@@ -126,6 +128,7 @@ jobs:
     steps:
       - *attach_workspace
       - *install_system_dependencies
+      - run: bundle config set path 'vendor/bundle'
       - run: ./bin/rails assets:precompile
       - persist_to_workspace:
           root: ~/projects/
@@ -145,6 +148,7 @@ jobs:
     steps:
       - *attach_workspace
       - *install_system_dependencies
+      - run: bundle config set path 'vendor/bundle'
       - run:
           name: Create database
           command: ./bin/rails parallel:create
@@ -198,6 +202,7 @@ jobs:
     steps:
       - *attach_workspace
       - *install_system_dependencies
+      - run: bundle config set path 'vendor/bundle'
       - run: bundle exec i18n-tasks check-normalized
       - run: bundle exec i18n-tasks unused -l en
       - run: bundle exec i18n-tasks check-consistent-interpolations
