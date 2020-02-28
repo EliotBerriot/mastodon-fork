@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-lock '3.11.0'
+lock '3.11.2'
 
 set :repo_url, ENV.fetch('REPO', 'https://github.com/florence-social/mastodon-fork.git')
 set :branch, ENV.fetch('BRANCH', 'master')

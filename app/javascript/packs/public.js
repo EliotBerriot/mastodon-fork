@@ -3,6 +3,7 @@ import loadPolyfills from '../mastodon/load_polyfills';
 import ready from '../mastodon/ready';
 import { start } from '../mastodon/common';
 import { maxBioChars } from '../mastodon/initial_state';
+import loadKeyboardExtensions from '../mastodon/load_keyboard_extensions';
 
 start();
 
@@ -38,10 +39,10 @@ function main() {
   const React = require('react');
   const ReactDOM = require('react-dom');
   const Rellax = require('rellax');
-  const createHistory = require('history').createBrowserHistory;
+  const { createBrowserHistory } = require('history');
 
   const scrollToDetailedStatus = () => {
-    const history = createHistory();
+    const history = createBrowserHistory();
     const detailedStatuses = document.querySelectorAll('.public-layout .detailed-status');
     const location = history.location;
 
@@ -88,7 +89,7 @@ function main() {
       content.textContent = timeAgoString({
         formatMessage: ({ id, defaultMessage }, values) => (new IntlMessageFormat(messages[id] || defaultMessage, locale)).format(values),
         formatDate: (date, options) => (new Intl.DateTimeFormat(locale, options)).format(date),
-      }, datetime, now, now.getFullYear());
+      }, datetime, now, now.getFullYear(), content.getAttribute('datetime').includes('T'));
     });
 
     const reactComponents = document.querySelectorAll('[data-component]');
@@ -279,8 +280,21 @@ function main() {
       bioTextArea.style.height = (bioTextArea.scrollHeight+3) + 'px';
     }
   }
+
+  delegate(document, '.sidebar__toggle__icon', 'click', () => {
+    const target = document.querySelector('.sidebar ul');
+
+    if (target.style.display === 'block') {
+      target.style.display = 'none';
+    } else {
+      target.style.display = 'block';
+    }
+  });
 }
 
-loadPolyfills().then(main).catch(error => {
-  console.error(error);
-});
+loadPolyfills()
+  .then(main)
+  .then(loadKeyboardExtensions)
+  .catch(error => {
+    console.error(error);
+  });

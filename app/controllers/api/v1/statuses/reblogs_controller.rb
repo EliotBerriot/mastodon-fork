@@ -19,6 +19,7 @@ class Api::V1::Statuses::ReblogsController < Api::BaseController
 
     if @status
       authorize @status, :unreblog?
+      @status.discard
       RemovalWorker.perform_async(@status.id)
     end
 

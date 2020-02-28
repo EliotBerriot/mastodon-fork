@@ -18,9 +18,15 @@ If you want to contribute with monetary support you can do so via our [Open Coll
 
 ## Adding an Issue for Bug Report or Feature Request
 
-Bug reports and feature suggestions can be submitted to [GitHub Issues](https://github.com/florence-social/mastodon-fork/issues). Do not worry about submitting duplicates, but please make a cursory search to see if any similar reports or request have already been resolved or rejected in the past using the search function. If you find a bug or feature request which matches yours you can join the conversation by adding your commentary to that issue.
+Bug reports and feature suggestions must use descriptive and concise titles and be submitted to [GitHub Issues](https://github.com/tootsuite/mastodon/issues). Please use the search function to make sure that you are not submitting duplicates, and that a similar report or request has not already been resolved or rejected.
 
-Try to describe your issue, the use-case, and additional considerations when submitting a feature request.
+## Translations
+
+You can submit translations via [Crowdin](https://crowdin.com/project/mastodon). They are periodically merged into the codebase.
+
+[![Crowdin](https://d322cqt584bo4o.cloudfront.net/mastodon/localized.svg)](https://crowdin.com/project/mastodon)
+
+## Pull requests
 
 ## Translations
 
